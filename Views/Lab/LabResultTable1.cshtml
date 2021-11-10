@@ -1,0 +1,22 @@
+﻿@model List<StatisticViewModel>
+<table id="LabtableAll" class="table table-bordered table-striped table-sm">
+    <thead>
+        <tr>
+            <td>
+                Номер опыта
+            </td>
+            <td>
+                Наблюдаемые значения случайной величины Х
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model)
+        {
+            <tr>
+                <td>@i.Skey</td>
+                <td>@i.SValue</td>
+            </tr>
+        }
+    </tbody>
+</table>

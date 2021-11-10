@@ -1,0 +1,60 @@
+﻿@*@model List<LabDataViewModel>*@
+@{
+    ViewData["Title"] = "Lab 1 ";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Лаборатоная работа № 1</p>
+
+
+<div id="InsertDataPanel" class="card">
+    <span id="tableTitle"></span>
+   
+</div>
+
+@*@Html.Partial("_LabDatatable", Model)*@
+<div class="card-body">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link" id="request-search-tab" data-toggle="tab" href="#request-search" role="tab" aria-controls="offline" aria-selected="true">Данные</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="ots-search-tab" data-toggle="tab" href="#ots-search" role="tab" aria-controls="offline" aria-selected="false">Результат</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade active show in" id="request-search" role="tabpanel" aria-labelledby="request-search-tab">
+            <div class="card">
+                @Html.Partial("_InsertDataForm")
+            </div>
+            <div id="labTableBody"></div>
+        </div>
+        <div class="tab-pane fade " id="ots-search" role="tabpanel" aria-labelledby="ots-search-tab">
+            <div class="card">
+                <div class="card-header">
+
+
+                </div>
+                <div class="card-body">
+                    <label>Оценка математического ожидания случайной величины X</label>
+                    <span class="form-text" id="sSampleMean"></span>
+                    <label>Оценка дисперсии случайной величины X</label>
+                    <span class="form-text" id="sVarianceEstimation"></span>
+                </div>
+
+            </div>
+            <div id="labResult"></div>
+            <div class="container">
+                <canvas id="myChart1" width="600" height="400"></canvas>
+            </div>
+
+
+            <div id="labResult1"></div>
+            <div class="container">
+                <canvas id="myChart" width="600" height="400"></canvas>
+            </div>
+
+        </div>
+
+    </div>
+</div>
