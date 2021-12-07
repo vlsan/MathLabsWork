@@ -25,14 +25,32 @@ namespace WebMathModelLabs.Controllers
             return View();
         }
 
+        public IActionResult lab2Index()
+        {
+            return View("Lab2Index");
+        }
+        public IActionResult lab3Index()
+        {
+            return View("Lab3Index");
+        }
+        public IActionResult lab4Index()
+        {
+            return View("Lab4Index");
+        }
+        public IActionResult lab5Index()
+        {
+            return View("Lab5Index");
+        }
+        public IActionResult lab6Index()
+        {
+            return View("Lab6Index");
+        }
+
 
         [HttpPost]
         public ActionResult<List<LabDataViewModel>> GetLabData(int cnt)
         {
             var model = _labService.GetLabDataViewModels();
-
-           
-
             return PartialView("_LabDatatable", model);
         }
 
@@ -50,6 +68,21 @@ namespace WebMathModelLabs.Controllers
             var model = _labService.GetLabDataViewModels();
             var st = _labService.EmpiricalFrequencies(model);
             return PartialView("LabResultTable1", st);
+        }
+
+        [HttpPost]
+        public ActionResult<List<StatisticViewModel>> GetLab3Result()
+        {
+            var model = _labService.GetLabDataViewModels();
+            var st= _labService.GetTheoreticalFrequencies(model);
+            return PartialView("_Lab3ResultTable", st);
+        }
+        public ActionResult<List<StatisticViewModel>> GetLab4Result()
+        {
+            var model = _labService.GetLabDataViewModels();
+            var st = _labService.GetEmpiricalAndTheoreticalFrequencies(model);
+            return PartialView("_Lab4ResultTable", st);
+
         }
 
 
@@ -114,6 +147,28 @@ namespace WebMathModelLabs.Controllers
                 });
             }
             catch (Exception ex)
+            {
+                return Json(new
+                {
+                    status = "Ошибка сервера " + ex.Message
+                });
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="req">"assimetry", "excess", "samplemean"</param>
+        /// <returns></returns>
+        [HttpGet]
+        public JsonResult GetValueByRequest(string req)
+        { 
+            try
+            {
+                var result = _labService.GetValueByReguest(req);
+                return Json( new { status = "Ok",
+                resultData = result.ToString() });
+            }
+            catch(Exception ex)
             {
                 return Json(new
                 {

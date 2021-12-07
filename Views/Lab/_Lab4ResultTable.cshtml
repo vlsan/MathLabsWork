@@ -1,0 +1,30 @@
+﻿@model ResultViewModel
+
+    <table id="tableLab3Result" class="table table-bordered table-striped table-sm">
+        <tr>
+            <td><span>Границы интервалов</span></td>
+            @foreach (var item in @Model.StatisticViewModels)
+           {
+               <td>@item.Skey</td>
+           }
+        </tr>
+        <tr>
+            <td><span>Теоритические частоты</span></td>
+             @foreach (var item in @Model.StatisticViewModels)
+             {
+               <td>@item.SValue</td>
+             }
+        </tr>
+        <tr>
+            <td><span>Эмпирические частоты</span></td>
+             @foreach (var item in @Model.StatisticViewModels)
+             {
+               <td>@item.SValue1</td>
+             }
+        </tr>
+    </table>
+
+    <div class="card-body">
+        <span>Критерий Пирсона:  @Model.DoubleValue </span><br />
+        <span>@Model.StringValue</span>
+    </div>

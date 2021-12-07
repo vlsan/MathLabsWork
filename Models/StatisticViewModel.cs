@@ -9,5 +9,6 @@ namespace WebMathModelLabs.Models
     {
         public string Skey { get; set; }
         public double SValue { get; set; }
+        public double SValue1 { get; set; }
     }
 }

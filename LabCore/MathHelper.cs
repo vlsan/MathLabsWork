@@ -104,13 +104,13 @@ namespace WebMathModelLabs.LabCore
         /// </summary>
         /// <param name="listNumb"></param>
         /// <returns></returns>
-        static public ObservableCollection<Pair<string, double>> EmpiricalFrequencies(
+        static public List<Pair<string, double>> EmpiricalFrequencies(
             IEnumerable<Pair<int, double>> listNumb)
         {
             var min = listNumb.Min(m => m.Value);
             var max = listNumb.Max(m => m.Value);
             var dX = SturgessFormulaDelta(max - min, listNumb.Count());
-            var listResult = new ObservableCollection<Pair<string, double>>();
+            var listResult = new List<Pair<string, double>>();
             double i;
             var n = 0d;
             var j = 1;
@@ -144,10 +144,10 @@ namespace WebMathModelLabs.LabCore
         /// </summary>
         /// <param name="empiricalFrequencies"></param>
         /// <returns></returns>
-        static public ObservableCollection<Pair<string, double>> StatisticalSeries(
-            ObservableCollection<Pair<string, double>> empiricalFrequencies)
+        static public List<Pair<string, double>> StatisticalSeries(
+            List<Pair<string, double>> empiricalFrequencies)
         {
-            var listResult = new ObservableCollection<Pair<string, double>>();
+            var listResult = new List<Pair<string, double>>();
             listResult.Add(new Pair<string, double>(empiricalFrequencies[0].Key, empiricalFrequencies[0].Value));
             for (var i = 1; i < empiricalFrequencies.Count; i++)
             {
@@ -194,13 +194,13 @@ namespace WebMathModelLabs.LabCore
         #endregion
 
         #region Теоретические частоты попадания случайной величины в интервалы
-        static public ObservableCollection<Pair<string, double>> TheoreticalFrequencies(
+        static public List<Pair<string, double>> TheoreticalFrequencies(
             IEnumerable<Pair<int, double>> listNumb)
         {
             var min = listNumb.Min(m => m.Value);
             var max = listNumb.Max(m => m.Value);
             var dX = SturgessFormulaDelta(max - min, listNumb.Count());
-            var listResult = new ObservableCollection<Pair<string, double>>();
+            var listResult = new List<Pair<string, double>>();
             double i;
             var j = 1;
             var sampleMean = SampleMean(listNumb);
@@ -226,10 +226,10 @@ namespace WebMathModelLabs.LabCore
         /// </summary>
         /// <param name="listNumb"></param>
         /// <returns></returns>
-        static public ObservableCollection<Triple<string, double, double>> EmpiricalAndTheoreticalFrequencies(
+        static public List<Triple<string, double, double>> EmpiricalAndTheoreticalFrequencies(
             IEnumerable<Pair<int, double>> listNumb)
         {
-            var listResult = new ObservableCollection<Triple<string, double, double>>();
+            var listResult = new List<Triple<string, double, double>>();
             var empiricalFrequencies = EmpiricalFrequencies(listNumb);
             var theoreticalFrequencies = TheoreticalFrequencies(listNumb);
             if (empiricalFrequencies.Count != theoreticalFrequencies.Count)
@@ -252,16 +252,17 @@ namespace WebMathModelLabs.LabCore
 
         #region Критерий Пирсона
         /// <summary>
-        /// Критерий Пирсона
+        ///  Критерий Пирсона
         /// </summary>
-        /// <param name="listNumb"></param>
+        /// <param name="theoreticalFrequenciesCalculate">Список значений</param>
+        /// <param name="cnt">Количество элементов</param>
         /// <returns></returns>
-        static public double PearsonTest(ObservableCollection<Triple<string, double, double>> theoreticalFrequenciesCalculate, int n)
+        static public double PearsonTest(List<Triple<string, double, double>> theoreticalFrequenciesCalculate, int cnt)
         {
             var result = 0d;
             foreach (var item in theoreticalFrequenciesCalculate)
             {
-                result += (Math.Pow((item.Value2 - item.Value1), 2) * (double)n) / item.Value1;
+                result += (Math.Pow((item.Value2 - item.Value1), 2) * (double)cnt) / item.Value1;
             }
             return result;
         }
@@ -269,12 +270,13 @@ namespace WebMathModelLabs.LabCore
         /// <summary>
         /// Сравнение Критерия Пирсона с таблиным
         /// </summary>
-        /// <param name="listNumb"></param>
+        /// <param name="pearsonTest">Значение теста Пирсона</param>
+        /// <param name="cnt">Количество элементов</param>
         /// <returns></returns>
-        static public string СomparisonPearsonTest(double pearsonTest, int n)
+        static public string СomparisonPearsonTest(double pearsonTest, int cnt)
         {
             var PearsonTestObj = new PearsonTest();
-            return PearsonTestObj.Conculete(pearsonTest, n);
+            return PearsonTestObj.Conculete(pearsonTest, cnt);
         }
         #endregion
 
@@ -283,12 +285,15 @@ namespace WebMathModelLabs.LabCore
         /// <summary>
         /// Сравнение Критерия Пирсона с таблиным
         /// </summary>
-        /// <param name="listNumb"></param>
+        /// <param name="varianceEstimation1">Список значений 1</param>
+        /// <param name="varianceEstimation2">Сприсок значений 2</param>
+        /// <param name="cnt1">Количество элементов списка 1</param>
+        /// <param name="cnt2">Количество элементов списка 2</param>
         /// <returns></returns>
-        static public string СomparisonPhisherTest(double varianceEstimation1, double varianceEstimation2, int n1, int n2)
+        static public string СomparisonPhisherTest(double varianceEstimation1, double varianceEstimation2, int cnt1, int cnt2)
         {
             var phisherTest = new PhisherTest();
-            return phisherTest.Conculete(varianceEstimation1, varianceEstimation2, n1, n2);
+            return phisherTest.Conculete(varianceEstimation1, varianceEstimation2, cnt1, cnt2);
         }
         #endregion
 
@@ -961,20 +966,27 @@ namespace WebMathModelLabs.LabCore
             table.Add(new PhisherTestOne(12, 17, 3.45d, 2.38d));
 
         }
-
-        public string Conculete(double varianceEstimation1, double varianceEstimation2, int n1, int n2)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="varianceEstimation1"></param>
+        /// <param name="varianceEstimation2"></param>
+        /// <param name="cnt1"></param>
+        /// <param name="cnt2"></param>
+        /// <returns></returns>
+        public string Conculete(double varianceEstimation1, double varianceEstimation2, int cnt1, int cnt2)
         {
             var f = 0d;
             PhisherTestOne f2;
             if (varianceEstimation1 > varianceEstimation2)
             {
                 f = varianceEstimation1 / varianceEstimation2;
-                f2 = table.First(m => m.Key1 == n1 && m.Key2 == n2);
+                f2 = table.First(m => m.Key1 == cnt1 && m.Key2 == cnt2);
             }
             else
             {
                 f = (varianceEstimation2 / varianceEstimation1);
-                f2 = table.First(m => m.Key1 == n2 && m.Key2 == n1);
+                f2 = table.First(m => m.Key1 == cnt2 && m.Key2 == cnt1);
             }
             if (f > f2.Value1)
             {

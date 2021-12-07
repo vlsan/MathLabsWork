@@ -14,8 +14,16 @@ namespace WebMathModelLabs.LabCore.BLL
         List<LabDataViewModel> GetLabDataViewModels();
         List<StatisticViewModel> StatisticalSeries(List<LabDataViewModel> items);
         List<StatisticViewModel> EmpiricalFrequencies(List<LabDataViewModel> items);
+        List<StatisticViewModel> GetTheoreticalFrequencies(List<LabDataViewModel> items);
+        ResultViewModel GetEmpiricalAndTheoreticalFrequencies(List<LabDataViewModel> items);
         double GetSampleMean();
         double GetVarianceEstimation();
+        /// <summary>
+        /// Значение Ассиметрии, Эксцесс, 
+        /// </summary>
+        /// <param name="requestType">"assimetry", "excess", "samplemean" </param>
+        /// <returns></returns>
+        double GetValueByReguest(string requestType);
         #endregion
     }
 }

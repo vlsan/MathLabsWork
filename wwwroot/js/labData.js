@@ -28,8 +28,13 @@ $(document).ready(function () {
     getlabData(1);
     getLabResult1();
     getLabResult2();
-    setChart("EmpiricalFrequencies", $("#myChart"), 0.1, 0.1);
-    setChart("StatisticalSeries", $("#myChart1"), 20, 1);
+    setValuesLab2();
+    getLab3Result();
+    getLab4Result();
+    if ($("#myChart").length > 0) {
+        setChart("EmpiricalFrequencies", $("#myChart"), 0.1, 0.1);
+        setChart("StatisticalSeries", $("#myChart1"), 20, 1);
+    }
 });
 
 
@@ -54,19 +59,19 @@ function setChart(type, ctx, padding, min) {
                         data: _values,
                         backgroundColor: [
                             'rgba(216, 27, 96, 0.6)',
-                            //    'rgba(3, 169, 244, 0.6)',
-                            //    'rgba(255, 152, 0, 0.6)',
-                            //    'rgba(29, 233, 182, 0.6)',
-                            //    'rgba(156, 39, 176, 0.6)',
-                            //    'rgba(84, 110, 122, 0.6)'
+                                'rgba(3, 169, 244, 0.6)',
+                                'rgba(255, 152, 0, 0.6)',
+                                'rgba(29, 233, 182, 0.6)',
+                                'rgba(156, 39, 176, 0.6)',
+                                'rgba(84, 110, 122, 0.6)'
                         ],
                         borderColor: [
                             'rgba(216, 27, 96, 1)',
-                            //    'rgba(3, 169, 244, 1)',
-                            //    'rgba(255, 152, 0, 1)',
-                            //    'rgba(29, 233, 182, 1)',
-                            //    'rgba(156, 39, 176, 1)',
-                            //    'rgba(84, 110, 122, 1)'
+                                'rgba(3, 169, 244, 1)',
+                                'rgba(255, 152, 0, 1)',
+                                'rgba(29, 233, 182, 1)',
+                                'rgba(156, 39, 176, 1)',
+                                'rgba(84, 110, 122, 1)'
                         ],
                         borderWidth: 1
                     }]
@@ -103,7 +108,13 @@ function setChart(type, ctx, padding, min) {
 
 }
 
+async function setValuesLab2() {
 
+    if ($("#sAssimetry").length > 0) {
+       getRequestValue("assimetry");
+       getRequestValue("excess");
+    }
+}
 
 function getlabData(Id) {
     params = {
@@ -137,6 +148,27 @@ function getLabResult2() {
     });
 }
 
+function getLab3Result() {
+    params = {
+        Id: "1"
+    };
+    $.post("/Lab/GetLab3Result", params, function (data) {
+        $("#tableLab3Result").empty();
+        $("#tableLab3Result").html(data);
+    });
+}
+
+function getLab4Result() {
+    params = {
+        Id: "1"
+    };
+    $.post("/Lab/GetLab4Result", params, function (data) {
+        $("#tableLab4Result").empty();
+        $("#tableLab4Result").html(data);
+    });
+}
+
+
 function getSampleMean() {
     var params = {
         SValue: $("#tSvalue").val()
@@ -148,10 +180,25 @@ function getSampleMean() {
             $("#sVarianceEstimation").text(data.varianceEstimation);
         }
         else {
-            alert(data.status);
+            
         }
     });
 }
+
+function getRequestValue(sResquest) {
+    var params = { req: sResquest };
+    $.get("/Lab/GetValueByRequest", params, function (data) {
+        if (data.status === "Ok") {
+            if (sResquest === "assimetry") {
+                $("#sAssimetry").text(data.resultData);
+            }
+            if (sResquest === "excess") {
+                $("#sExcess").text(data.resultData);
+            }
+        }
+    });
+}
+
 
 function addNewData() {
     var params = {

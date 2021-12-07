@@ -1,0 +1,18 @@
+﻿@model List<StatisticViewModel>
+
+    <table id="tableLab3Result" class="table table-bordered table-striped table-sm">
+        <tr>
+            <td><span>Границы интервалов</span></td>
+            @foreach (var item in Model)
+           {
+               <td>@item.Skey</td>
+           }
+        </tr>
+        <tr>
+            <td><span>Теоритические частоты</span></td>
+             @foreach (var item in Model)
+             {
+               <td>@item.SValue</td>
+             }
+        </tr>
+    </table>
